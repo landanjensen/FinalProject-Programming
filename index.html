@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Comments Section</title>
+    <style>
+
+    
+      #comments {
+        display: flex;
+        flex-direction: column-reverse;
+        
+        
+      }
+
+      .comment {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: lightblue;
+        
+      }
+
+      .comment h4 {
+        margin-top: 0;
+      }
+
+      #comment-form {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: lightblue;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #comment-form input[type="text"] {
+        flex-grow: 1;
+        margin-right: 10px;
+        
+      }
+
+     
+    </style>
+  </head>
+  <body>
+
+    <div id="comments">
+      <div class="comment">
+        <h4>Landan Jensen</h4>
+        <p>Trying to decide a career path? Programming is the move. Change my mind.</p>
+      </div>
+    </div>
+
+    <form id="comment-form">
+      <input type="text" placeholder="Enter your name">
+      <input type="text" placeholder="Enter your comment">
+      <button type="submit">Add Comment</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+     
+      function addComment() {
+       
+        var name = $("#comment-form input[type='text']:first-of-type").val();
+        var comment = $("#comment-form input[type='text']:last-of-type").val();
+
+       
+        $("#comment-form input[type='text']").val("");
+
+       
+        var html = "<div class='comment'><h4>" + name + "</h4><p>" + comment + "</p><button class='edit-comment'>Edit</button><button class='delete-comment'>Delete</button></div>";
+
+       
+        $("#comments").prepend(html);
+      }
+
+      
+      $("#comment-form").submit(function(event) {
+        event.preventDefault();
+        addComment();
+      });
+
+      
+      $("#comments").on("click", ".delete-comment", function() {
+        $(this).closest(".comment").remove();
+      });
+
+      
+      $("#comments").on("click", ".edit-comment", function() {
+        var $comment = $(this).closest(".comment");
+        var $p = $comment.find("p");
+        var $textarea = $("<textarea>").text($p.text());
+        $p.replaceWith($textarea);
+        $(this).text("Save");
+        $(this).removeClass("edit-comment").addClass("save-comment");
+      });
+
+      
+      $("#comments").on("click", ".save-comment", function() {
+        var $comment = $(this).closest(".comment");
+        var $textarea = $comment.find("textarea");
+        var $p = $("<p>").text($textarea.val());
+        $textarea.replaceWith($p);
+        $(this).text("Edit");
+        $(this).removeClass("save-comment").addClass("edit-comment");
+      });
+    </script>
+  </body>
+</html>
